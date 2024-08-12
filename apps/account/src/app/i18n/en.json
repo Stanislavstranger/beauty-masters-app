@@ -1,0 +1,7 @@
+{
+  "ERRORS": {
+    "INCORRECT_LOGIN": "Incorrect login",
+    "INCORRECT_PASSWORD": "Incorrect password",
+    "USER_ALREADY_REGISTERED": "This user is already registered"
+  }
+}

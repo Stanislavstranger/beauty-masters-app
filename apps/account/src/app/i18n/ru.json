@@ -1,0 +1,7 @@
+{
+  "ERRORS": {
+    "INCORRECT_LOGIN": "Неправильный логин",
+    "INCORRECT_PASSWORD": "Неправильный пароль",
+    "USER_ALREADY_REGISTERED": "Этот пользователь уже зарегистрирован"
+  }
+}
