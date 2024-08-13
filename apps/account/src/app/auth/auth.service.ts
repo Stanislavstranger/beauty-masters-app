@@ -7,9 +7,8 @@ import {
 } from './auth.constants';
 import { UserEntity } from '../user/entities/user.entity';
 import { IUser, UserRole } from '@./interfaces';
-import { RegisterDto } from './dto/register.dto';
-import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
+import { AccountLogin, AccountRegister } from '@./contracts';
 
 @Injectable()
 export class AuthService {
@@ -22,7 +21,7 @@ export class AuthService {
     email,
     password,
     displayName,
-  }: RegisterDto, ): Promise<{ email: string }> {
+  }: AccountRegister.Request, ): Promise<AccountRegister.Response> {
     const oldUser = await this.userRepository.findUser(email);
     if (oldUser) {
       throw new Error(THIS_USER_ALREADY_REGISTERED);
@@ -38,7 +37,7 @@ export class AuthService {
     return { email: newUser.email };
   }
 
-  async validateUser({ email, password }: LoginDto): Promise<{
+  async validateUser({ email, password }: AccountLogin.Request): Promise<{
     id: Pick<IUser, '_id'>;
   }> {
     const user = await this.userRepository.findUser(email);

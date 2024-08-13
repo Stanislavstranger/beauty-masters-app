@@ -4,6 +4,8 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { getMongoConfig } from './configs/mongo.config';
+import { RMQModule } from 'nestjs-rmq';
+import { getRMQConfig } from './configs/rmq.config';
 /* import { I18nModule } from 'nestjs-i18n';
 import { getI18Config } from './configs/i18.config'; */
 
@@ -13,6 +15,7 @@ import { getI18Config } from './configs/i18.config'; */
       isGlobal: true,
       envFilePath: 'envs/.account.env',
     }),
+    RMQModule.forRootAsync(getRMQConfig()),
     /* I18nModule.forRoot(getI18Config()), */
     UserModule,
     AuthModule,
