@@ -6,9 +6,9 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { RegisterDto } from './dto/register.dto';
-import { LoginDto } from './dto/login.dto';
 import { Public } from './is-public.decorator';
+import { AccountLogin } from '@./contracts';
+import { AccountRegister } from '@./contracts';
 
 @Controller('auth')
 export class AuthController {
@@ -17,14 +17,14 @@ export class AuthController {
   @Public()
   @UsePipes(new ValidationPipe())
   @Post('register')
-  async register(@Body() dto: RegisterDto): Promise<{ email: string }> {
+  async register(@Body() dto: AccountRegister.Request): Promise<AccountRegister.Response> {
     return this.authService.register(dto);
   }
 
   @Public()
   @UsePipes(new ValidationPipe())
   @Post('login')
-  async login(@Body() dto: LoginDto): Promise<{ access_token: string }> {
+  async login(@Body() dto: AccountLogin.Request): Promise<AccountLogin.Response> {
     const { id } = await this.authService.validateUser(dto);
     return this.authService.login(id);
   }
