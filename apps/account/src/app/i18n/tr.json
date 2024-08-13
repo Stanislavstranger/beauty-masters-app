@@ -1,0 +1,7 @@
+{
+  "ERRORS": {
+    "INCORRECT_LOGIN": "Hatalı giriş",
+    "INCORRECT_PASSWORD": "Hatalı şifre",
+    "USER_ALREADY_REGISTERED": "Bu kullanıcı zaten kayıtlı"
+  }
+}
