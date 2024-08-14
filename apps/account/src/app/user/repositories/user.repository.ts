@@ -3,6 +3,7 @@ import { User } from '../models/user.model';
 import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { UserEntity } from '../entities/user.entity';
+import { IUser } from '@./interfaces';
 
 @Injectable()
 export class UserRepository {
@@ -19,7 +20,21 @@ export class UserRepository {
     return this.userModel.findOne({ email }).exec();
   }
 
-  async deleteUSer(email: string) {
-    this.userModel.deleteOne({email}).exec(); 
+  async findUserById(id: string): Promise<Omit<IUser, 'passwordHash'>> {
+    return this.userModel
+      .findById(id)
+      .select({
+        _id: true,
+        displayName: true,
+        email: true,
+        passwordHash: false,
+        role: true,
+        bookings: true,
+      })
+      .exec();
+  }
+
+  async deleteUser(email: string) {
+    this.userModel.deleteOne({ email }).exec();
   }
 }

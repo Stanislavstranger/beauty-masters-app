@@ -10,6 +10,12 @@ export enum PurchaseState {
   Canceled = 'Canceled',
 }
 
+export interface IUserBookings {
+  _id?: string | unknown;
+  bookingId: string;
+  purchaseState: PurchaseState;
+}
+
 export interface IUser {
   _id?: string | unknown;
   displayName?: string;
@@ -17,9 +23,4 @@ export interface IUser {
   passwordHash: string;
   role: UserRole;
   bookings?: IUserBookings[];
-}
-
-export interface IUserBookings {
-  bookingId: string;
-  purchaseState: PurchaseState;
 }
