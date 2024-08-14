@@ -7,7 +7,7 @@ export enum PurchaseState {
   Started = 'Started',
   WaitingForPayment = 'WaitingForPayment',
   Purchased = 'Purchased',
-  Canceled = 'Canceled'
+  Canceled = 'Canceled',
 }
 
 export interface IUser {
@@ -16,6 +16,7 @@ export interface IUser {
   email: string;
   passwordHash: string;
   role: UserRole;
+  bookings?: IUserBookings[];
 }
 
 export interface IUserBookings {

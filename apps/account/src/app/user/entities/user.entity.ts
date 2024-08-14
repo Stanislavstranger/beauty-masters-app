@@ -1,4 +1,4 @@
-import { IUser, UserRole } from '@./interfaces';
+import { IUser, IUserBookings, UserRole } from '@./interfaces';
 import { compare, genSalt, hash } from 'bcryptjs';
 
 export class UserEntity implements IUser {
@@ -7,6 +7,7 @@ export class UserEntity implements IUser {
   email: string;
   passwordHash: string;
   role: UserRole;
+  bookings?: IUserBookings[];
 
   constructor(user: Omit<IUser, 'passwordHash'>);
   constructor(user: IUser);
@@ -16,6 +17,7 @@ export class UserEntity implements IUser {
     this.displayName = user.displayName;
     this.email = user.email;
     this.role = user.role;
+    this.bookings = user.bookings;
 
     if ('passwordHash' in user) {
       this.passwordHash = user.passwordHash;
