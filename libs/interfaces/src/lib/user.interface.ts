@@ -3,10 +3,22 @@ export enum UserRole {
   Client = 'Client',
 }
 
+export enum PurchaseState {
+  Started = 'Started',
+  WaitingForPayment = 'WaitingForPayment',
+  Purchased = 'Purchased',
+  Canceled = 'Canceled'
+}
+
 export interface IUser {
   _id?: string | unknown;
   displayName?: string;
   email: string;
   passwordHash: string;
   role: UserRole;
+}
+
+export interface IUserBookings {
+  bookingId: string;
+  purchaseState: PurchaseState;
 }
