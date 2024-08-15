@@ -33,4 +33,9 @@ export class UserEntity implements IUser {
   public async validatePassword(password: string): Promise<boolean> {
     return compare(password, this.passwordHash);
   }
+
+  public async updateProfile(displayName: string): Promise<this> {
+    this.displayName = displayName;
+    return this;
+  }
 }
