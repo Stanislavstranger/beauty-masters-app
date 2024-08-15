@@ -24,6 +24,16 @@ export class UserEntity implements IUser {
     }
   }
 
+  public async getPublicProfile(): Promise<
+    Pick<IUser, 'email' | 'role' | 'displayName'>
+  > {
+    return {
+      email: this.email,
+      role: this.role,
+      displayName: this.displayName,
+    };
+  }
+
   public async setPassword(password: string): Promise<this> {
     const salt = await genSalt(10);
     this.passwordHash = await hash(password, salt);
