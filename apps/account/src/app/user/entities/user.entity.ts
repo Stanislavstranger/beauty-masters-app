@@ -1,5 +1,7 @@
-import { IUser, IUserBookings, UserRole } from '@./interfaces';
+import { IUser, IUserBookings, PurchaseState, UserRole } from '@./interfaces';
 import { compare, genSalt, hash } from 'bcryptjs';
+import { SUCH_A_RESERVATION_ALREADY_EXISTS } from '../user.constants';
+import { NotFoundException } from '@nestjs/common';
 
 export class UserEntity implements IUser {
   _id?: unknown;
@@ -22,6 +24,33 @@ export class UserEntity implements IUser {
     if ('passwordHash' in user) {
       this.passwordHash = user.passwordHash;
     }
+  }
+
+  public async addBooking(bookingId: string) {
+    const exist = this.bookings.find((booking) => booking._id === bookingId);
+    if (exist) {
+      throw new NotFoundException(SUCH_A_RESERVATION_ALREADY_EXISTS);
+    }
+    this.bookings.push({
+      bookingId,
+      purchaseState: PurchaseState.Started,
+    });
+  }
+
+  public async deleteBooking(bookingId: string) {
+    this.bookings = this.bookings.filter(
+      (booking) => booking._id !== bookingId
+    );
+  }
+
+  public async updateBookingStatus(bookingId: string, state: PurchaseState) {
+    this.bookings = this.bookings.map((booking) => {
+      if (booking._id === bookingId) {
+        booking.purchaseState = state;
+        return booking;
+      }
+      return booking;
+    });
   }
 
   public async getPublicProfile(): Promise<
