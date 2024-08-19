@@ -6,3 +6,4 @@ export * from './lib/account/account.user-bookings';
 export * from './lib/account/account.change-profile';
 export * from './lib/booking/booking.get-booking';
 export * from './lib/payment/payment.generate-link';
+export * from './lib/payment/payment.check';
