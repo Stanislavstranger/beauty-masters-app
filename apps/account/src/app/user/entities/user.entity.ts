@@ -4,7 +4,7 @@ import { SUCH_A_RESERVATION_ALREADY_EXISTS } from '../user.constants';
 import { NotFoundException } from '@nestjs/common';
 
 export class UserEntity implements IUser {
-  _id?: unknown;
+  _id?: string;
   displayName?: string;
   email: string;
   passwordHash: string;
@@ -26,9 +26,14 @@ export class UserEntity implements IUser {
     }
   }
 
+  private async isBookingExist(
+    bookingId: string
+  ): Promise<IUserBookings | undefined> {
+    return this.bookings.find((booking) => booking._id === bookingId);
+  }
+
   public async addBooking(bookingId: string) {
-    const exist = this.bookings.find((booking) => booking._id === bookingId);
-    if (exist) {
+    if (this.isBookingExist(bookingId)) {
       throw new NotFoundException(SUCH_A_RESERVATION_ALREADY_EXISTS);
     }
     this.bookings.push({
@@ -43,7 +48,18 @@ export class UserEntity implements IUser {
     );
   }
 
-  public async updateBookingStatus(bookingId: string, state: PurchaseState) {
+  public async setBookingStatus(bookingId: string, state: PurchaseState) {
+    if (!this.isBookingExist(bookingId)) {
+      this.bookings.push({
+        bookingId,
+        purchaseState: state,
+      });
+      return this;
+    }
+    if (state === PurchaseState.Canceled) {
+      this.deleteBooking(bookingId);
+      return this;
+    }
     this.bookings = this.bookings.map((booking) => {
       if (booking._id === bookingId) {
         booking.purchaseState = state;
@@ -51,6 +67,7 @@ export class UserEntity implements IUser {
       }
       return booking;
     });
+    return this;
   }
 
   public async getPublicProfile(): Promise<

@@ -7,9 +7,9 @@ export class BuyBookingSaga {
   private state: BuyBookingSagaState;
 
   constructor(
-    private user: UserEntity,
-    private bookingId: string,
-    private rmqService: RMQService
+    public user: UserEntity,
+    public bookingId: string,
+    public rmqService: RMQService
   ) {}
 
   setState(state: PurchaseState, bookingId: string) {
@@ -24,7 +24,7 @@ export class BuyBookingSaga {
         break;
     }
     this.state.setContext(this);
-    this.user.updateBookingStatus(bookingId, state);
+    this.user.setBookingStatus(bookingId, state);
   }
 
   getState() {

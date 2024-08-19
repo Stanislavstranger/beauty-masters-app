@@ -17,7 +17,7 @@ export interface IUserBookings {
 }
 
 export interface IUser {
-  _id?: string | unknown;
+  _id?: string;
   displayName?: string;
   email: string;
   passwordHash: string;
