@@ -8,3 +8,13 @@ export const UNABLE_TO_CREATE_PAYMENT_LINK_DURING_PROCESS =
   'Unable to create payment link during process';
 export const PAYMENT_CANNOT_BE_CANCELLED_IN_PROGRESS =
   'Payment cannot be cancelled in progress';
+export const YOU_CANNOT_PAY_FOR_AN_ALREADY_PAID_BOOKING =
+  'You cannot pay for an already paid booking';
+export const IT_IS_NOT_POSSIBLE_TO_CHECK_THE_PAYMENT_OF_AN_ALREADY_PAID_BOOKING =
+  'It is not possible to check the payment of an already paid booking';
+export const IT_IS_NOT_POSSIBLE_TO_CANCEL_A_PURCHASED_RESERVATION =
+  'It is not possible to cancel a purchased reservation';
+export const CANNOT_CHECK_FOR_CANCELLED_BOOKING =
+  'Cannot check for cancelled booking';
+export const CANNOT_CANCEL_FOR_CANCELLED_BOOKING =
+  'Cannot cancel for cancelled booking';
