@@ -7,7 +7,7 @@ import {
 import { BuyBookingSagaState } from './buy-booking.state';
 import { ConflictException } from '@nestjs/common';
 
-export class BuyBookingSagaStateFinished extends BuyBookingSagaState {
+export class BuyBookingSagaStatePurchased extends BuyBookingSagaState {
   public pay(): Promise<{ paymentLink: string; user: UserEntity }> {
     throw new ConflictException(YOU_CANNOT_PAY_FOR_AN_ALREADY_PAID_BOOKING);
   }

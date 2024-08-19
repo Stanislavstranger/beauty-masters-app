@@ -8,7 +8,7 @@ import {
 import { PaymentCheck } from '@./contracts';
 import { PurchaseState } from '@./interfaces';
 
-export class BuyBookingSagaStateProcess extends BuyBookingSagaState {
+export class BuyBookingSagaStateWaitingForPayment extends BuyBookingSagaState {
   public pay(): Promise<{ paymentLink: string; user: UserEntity }> {
     throw new BadRequestException(UNABLE_TO_CREATE_PAYMENT_LINK_DURING_PROCESS);
   }
