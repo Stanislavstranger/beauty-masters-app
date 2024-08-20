@@ -12,6 +12,6 @@ export namespace AccountBuyBooking {
   }
 
   export class Response {
-    paymentUrl!: string;
+    paymentLink!: string;
   }
 }

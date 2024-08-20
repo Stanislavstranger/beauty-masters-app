@@ -6,13 +6,14 @@ import {
 } from '../user.constants';
 import { BuyBookingSagaState } from './buy-booking.state';
 import { PurchaseState } from '@./interfaces';
+import { PaymentStatus } from '@./contracts';
 
 export class BuyBookingSagaStateCanceled extends BuyBookingSagaState {
   public pay(): Promise<{ paymentLink: string; user: UserEntity }> {
     this.saga.setState(PurchaseState.Started, this.saga.bookingId);
     return this.saga.getState().pay();
   }
-  public checkPayment(): Promise<{ user: UserEntity }> {
+  public checkPayment(): Promise<{ user: UserEntity; status: PaymentStatus }> {
     throw new ConflictException(CANNOT_CHECK_FOR_CANCELLED_BOOKING);
   }
   public cancel(): Promise<{ user: UserEntity }> {

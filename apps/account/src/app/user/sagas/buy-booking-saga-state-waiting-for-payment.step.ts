@@ -5,14 +5,17 @@ import {
   PAYMENT_CANNOT_BE_CANCELLED_IN_PROGRESS,
   UNABLE_TO_CREATE_PAYMENT_LINK_DURING_PROCESS,
 } from '../user.constants';
-import { PaymentCheck } from '@./contracts';
+import { PaymentCheck, PaymentStatus } from '@./contracts';
 import { PurchaseState } from '@./interfaces';
 
 export class BuyBookingSagaStateWaitingForPayment extends BuyBookingSagaState {
   public pay(): Promise<{ paymentLink: string; user: UserEntity }> {
     throw new BadRequestException(UNABLE_TO_CREATE_PAYMENT_LINK_DURING_PROCESS);
   }
-  public async checkPayment(): Promise<{ user: UserEntity }> {
+  public async checkPayment(): Promise<{
+    user: UserEntity;
+    status: PaymentStatus;
+  }> {
     const { status } = await this.saga.rmqService.send<
       PaymentCheck.Request,
       PaymentCheck.Response
@@ -20,15 +23,15 @@ export class BuyBookingSagaStateWaitingForPayment extends BuyBookingSagaState {
       userId: this.saga.user._id,
       bookingId: this.saga.bookingId,
     });
-    if (status === 'canceled') {
+    if (status === PaymentStatus.Canceled) {
       this.saga.setState(PurchaseState.Canceled, this.saga.bookingId);
-      return { user: this.saga.user };
+      return { user: this.saga.user, status: PaymentStatus.Canceled };
     }
-    if (status !== 'success') {
-      return { user: this.saga.user };
+    if (status !== PaymentStatus.Success) {
+      return { user: this.saga.user, status: PaymentStatus.Success };
     }
     this.saga.setState(PurchaseState.Purchased, this.saga.bookingId);
-    return { user: this.saga.user };
+    return { user: this.saga.user, status: PaymentStatus.Progress };
   }
   public cancel(): Promise<{ user: UserEntity }> {
     throw new ConflictException(PAYMENT_CANNOT_BE_CANCELLED_IN_PROGRESS);

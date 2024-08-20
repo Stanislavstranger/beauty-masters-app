@@ -1,3 +1,4 @@
+import { PaymentStatus } from '@./contracts';
 import { UserEntity } from '../entities/user.entity';
 import {
   IT_IS_NOT_POSSIBLE_TO_CANCEL_A_PURCHASED_RESERVATION,
@@ -11,12 +12,14 @@ export class BuyBookingSagaStatePurchased extends BuyBookingSagaState {
   public pay(): Promise<{ paymentLink: string; user: UserEntity }> {
     throw new ConflictException(YOU_CANNOT_PAY_FOR_AN_ALREADY_PAID_BOOKING);
   }
-  public checkPayment(): Promise<{ user: UserEntity }> {
+  public checkPayment(): Promise<{ user: UserEntity; status: PaymentStatus }> {
     throw new ConflictException(
       IT_IS_NOT_POSSIBLE_TO_CHECK_THE_PAYMENT_OF_AN_ALREADY_PAID_BOOKING
     );
   }
   public cancel(): Promise<{ user: UserEntity }> {
-    throw new ConflictException(IT_IS_NOT_POSSIBLE_TO_CANCEL_A_PURCHASED_RESERVATION);
+    throw new ConflictException(
+      IT_IS_NOT_POSSIBLE_TO_CANCEL_A_PURCHASED_RESERVATION
+    );
   }
 }

@@ -5,7 +5,11 @@ import {
   YOU_CANNOT_CHECK_A_PAYMENT_THAT_HAS_NOT_STARTED,
 } from '../user.constants';
 import { BuyBookingSagaState } from './buy-booking.state';
-import { BookingGetBooking, PaymentGenerateLink } from '@./contracts';
+import {
+  BookingGetBooking,
+  PaymentGenerateLink,
+  PaymentStatus,
+} from '@./contracts';
 import { PurchaseState } from '@./interfaces';
 
 export class BuyBookingSagaStateStarted extends BuyBookingSagaState {
@@ -38,7 +42,7 @@ export class BuyBookingSagaStateStarted extends BuyBookingSagaState {
     return { paymentLink, user: this.saga.user };
   }
 
-  public checkPayment(): Promise<{ user: UserEntity }> {
+  public checkPayment(): Promise<{ user: UserEntity; status: PaymentStatus }> {
     throw new NotFoundException(
       YOU_CANNOT_CHECK_A_PAYMENT_THAT_HAS_NOT_STARTED
     );
