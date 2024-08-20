@@ -1,7 +1,14 @@
-import { IUser, IUserBookings, PurchaseState, UserRole } from '@./interfaces';
+import {
+  IDomainEvent,
+  IUser,
+  IUserBookings,
+  PurchaseState,
+  UserRole,
+} from '@./interfaces';
 import { compare, genSalt, hash } from 'bcryptjs';
 import { SUCH_A_RESERVATION_ALREADY_EXISTS } from '../user.constants';
 import { NotFoundException } from '@nestjs/common';
+import { AccountChangedBooking } from '@./contracts';
 
 export class UserEntity implements IUser {
   _id?: string | unknown;
@@ -10,6 +17,7 @@ export class UserEntity implements IUser {
   passwordHash: string;
   role: UserRole;
   bookings?: IUserBookings[];
+  events?: IDomainEvent[];
 
   constructor(user: Omit<IUser, 'passwordHash'>);
   constructor(user: IUser);
@@ -66,6 +74,14 @@ export class UserEntity implements IUser {
         return booking;
       }
       return booking;
+    });
+    this.events.push({
+      topic: AccountChangedBooking.topic,
+      data: <AccountChangedBooking.Request>{
+        bookingId,
+        userId: this._id,
+        state,
+      },
     });
     return this;
   }
