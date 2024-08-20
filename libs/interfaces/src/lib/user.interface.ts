@@ -11,13 +11,13 @@ export enum PurchaseState {
 }
 
 export interface IUserBookings {
-  _id?: string | unknown;
+  _id?: unknown;
   bookingId: string;
   purchaseState: PurchaseState;
 }
 
 export interface IUser {
-  _id?: string;
+  _id?: string | unknown;
   displayName?: string;
   email: string;
   passwordHash: string;

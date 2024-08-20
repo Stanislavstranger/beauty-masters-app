@@ -8,7 +8,7 @@ export namespace PaymentGenerateLink {
     bookingId!: string;
 
     @IsString()
-    userId!: string;
+    userId!: string | unknown;
 
     @IsNumber()
     sum!: number;

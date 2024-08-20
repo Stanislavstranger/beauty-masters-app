@@ -1,5 +1,11 @@
 import { IsString } from 'class-validator';
 
+export enum PaymentStatus {
+  Canceled = 'canceled',
+  Success = 'success',
+  Progress = 'progress',
+}
+
 export namespace PaymentCheck {
   export const topic = 'payment.check.query';
 
@@ -7,10 +13,10 @@ export namespace PaymentCheck {
     @IsString()
     bookingId!: string;
 
-    userId!: string;
+    userId!: string | unknown;
   }
 
   export class Response {
-    status!: 'canceled' | 'success' | 'progress';
+    status!: PaymentStatus;
   }
 }

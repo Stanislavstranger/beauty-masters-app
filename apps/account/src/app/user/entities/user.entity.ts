@@ -4,7 +4,7 @@ import { SUCH_A_RESERVATION_ALREADY_EXISTS } from '../user.constants';
 import { NotFoundException } from '@nestjs/common';
 
 export class UserEntity implements IUser {
-  _id?: string;
+  _id?: string | unknown;
   displayName?: string;
   email: string;
   passwordHash: string;

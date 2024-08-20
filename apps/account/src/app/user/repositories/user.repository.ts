@@ -35,6 +35,7 @@ export class UserRepository {
         role: true,
         bookings: true,
       })
+      .lean<Omit<IUser, 'passwordHash'>>()
       .exec();
   }
 
