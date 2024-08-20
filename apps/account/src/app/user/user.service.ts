@@ -9,12 +9,14 @@ import {
   AccountCheckPayment,
 } from '@./contracts';
 import { BuyBookingSaga } from './sagas/buy-booking.saga';
+import { UserEventEmitter } from './user.event-emitter';
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly userRepository: UserRepository,
-    private readonly rmqService: RMQService
+    private readonly rmqService: RMQService,
+    private readonly userEventEmitter: UserEventEmitter
   ) {}
   async changeProfile({
     id,
@@ -27,7 +29,7 @@ export class UserService {
     const userEntity = await new UserEntity(existedUser).updateProfile(
       user.displayName
     );
-    await this.userRepository.updateUser(userEntity);
+    await this.updateUser(userEntity);
     return;
   }
 
@@ -42,7 +44,7 @@ export class UserService {
     const userEntity = new UserEntity(existedUser);
     const saga = new BuyBookingSaga(userEntity, bookingId, this.rmqService);
     const { user, paymentLink } = await saga.getState().pay();
-    await this.userRepository.updateUser(user);
+    await this.updateUser(user);
     return { paymentLink };
   }
 
@@ -57,7 +59,14 @@ export class UserService {
     const userEntity = new UserEntity(existedUser);
     const saga = new BuyBookingSaga(userEntity, bookingId, this.rmqService);
     const { user, status } = await saga.getState().checkPayment();
-    await this.userRepository.updateUser(user);
+    await this.updateUser(user);
     return { status };
+  }
+
+  private async updateUser(user: UserEntity) {
+    return Promise.all([
+      this.userEventEmitter.handle(user),
+      this.userRepository.updateUser(user),
+    ]);
   }
 }

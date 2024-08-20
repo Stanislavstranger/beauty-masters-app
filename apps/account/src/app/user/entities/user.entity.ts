@@ -17,7 +17,7 @@ export class UserEntity implements IUser {
   passwordHash: string;
   role: UserRole;
   bookings?: IUserBookings[];
-  events?: IDomainEvent[];
+  events: IDomainEvent[] = [];
 
   constructor(user: Omit<IUser, 'passwordHash'>);
   constructor(user: IUser);
