@@ -11,7 +11,6 @@ export enum PurchaseState {
 }
 
 export interface IUserBookings {
-  _id?: unknown;
   bookingId: string;
   purchaseState: PurchaseState;
 }

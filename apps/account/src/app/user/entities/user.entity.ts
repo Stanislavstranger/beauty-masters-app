@@ -37,7 +37,7 @@ export class UserEntity implements IUser {
   private async isBookingExist(
     bookingId: string
   ): Promise<IUserBookings | undefined> {
-    return this.bookings.find((booking) => booking._id === bookingId);
+    return this.bookings.find((booking) => booking.bookingId === bookingId);
   }
 
   public async addBooking(bookingId: string) {
@@ -52,7 +52,7 @@ export class UserEntity implements IUser {
 
   public async deleteBooking(bookingId: string) {
     this.bookings = this.bookings.filter(
-      (booking) => booking._id !== bookingId
+      (booking) => booking.bookingId !== bookingId
     );
   }
 
@@ -69,7 +69,7 @@ export class UserEntity implements IUser {
       return this;
     }
     this.bookings = this.bookings.map((booking) => {
-      if (booking._id === bookingId) {
+      if (booking.bookingId === bookingId) {
         booking.purchaseState = state;
         return booking;
       }
