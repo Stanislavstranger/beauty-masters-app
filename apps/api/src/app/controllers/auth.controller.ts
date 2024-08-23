@@ -19,11 +19,15 @@ export class AuthController {
   @UsePipes(new ValidationPipe())
   @Post('register')
   async register(@Body() dto: RegisterDto) {
-    try {
+    try { 
       return await this.rmqService.send<
         AccountRegister.Request,
         AccountRegister.Response
-      >(AccountRegister.topic, dto);
+      >(AccountRegister.topic, dto, {
+        headers: {
+          requestId: 'asaasd'
+        }
+      });
     } catch (error) {
       if (error instanceof Error) {
         throw new UnauthorizedException(error.message);

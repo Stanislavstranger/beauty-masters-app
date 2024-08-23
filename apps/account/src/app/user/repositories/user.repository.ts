@@ -42,4 +42,8 @@ export class UserRepository {
   async deleteUser(email: string): Promise<void> {
     this.userModel.deleteOne({ email }).exec();
   }
+
+  async healthCheck() {
+    return this.userModel.findOne({}).exec();
+  }
 }
