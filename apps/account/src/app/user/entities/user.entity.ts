@@ -86,6 +86,13 @@ export class UserEntity implements IUser {
     return this;
   }
 
+  getBookingState(bookingId: string): PurchaseState {
+    return (
+      this.bookings.find((booking) => booking.bookingId === bookingId)
+        ?.purchaseState ?? PurchaseState.Started
+    );
+  }
+
   public async getPublicProfile(): Promise<
     Pick<IUser, 'email' | 'role' | 'displayName'>
   > {

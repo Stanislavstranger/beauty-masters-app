@@ -14,7 +14,9 @@ export class BuyBookingSaga {
     public user: UserEntity,
     public bookingId: string,
     public rmqService: RMQService
-  ) {}
+  ) {
+    this.setState(user.getBookingState(bookingId), bookingId);
+  }
 
   setState(state: PurchaseState, bookingId: string) {
     switch (state) {

@@ -6,11 +6,18 @@ import { AuthModule } from '../auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { INestApplication } from '@nestjs/common';
 import { UserRepository } from '../user/repositories/user.repository';
-import { AccountLogin, AccountRegister, AccountUserInfo } from '@./contracts';
+import {
+  AccountBuyBooking,
+  AccountLogin,
+  AccountRegister,
+  AccountUserInfo,
+  BookingGetBooking,
+  PaymentGenerateLink,
+} from '@./contracts';
 import { verify } from 'jsonwebtoken';
 
 const authLogin: AccountLogin.Request = {
-  email: 'a1@a1.ru',
+  email: 'y1@y1.ru',
   password: '1',
 };
 
@@ -18,6 +25,8 @@ const authRegister: AccountRegister.Request = {
   ...authLogin,
   displayName: authLogin.email,
 };
+
+const bookingId = 'bookingId';
 
 describe('UserController', () => {
   let app: INestApplication;
@@ -70,6 +79,39 @@ describe('UserController', () => {
       id: userId,
     });
     expect(res.profile.displayName).toEqual(authRegister.displayName);
+  }, 15000);
+
+  it('BuyBooking', async () => {
+    const paymentLink = 'paymentLink';
+    rmqService.mockReply<BookingGetBooking.Response>(BookingGetBooking.topic, {
+      booking: {
+        _id: bookingId,
+        price: 1000,
+      },
+    });
+    rmqService.mockReply<PaymentGenerateLink.Response>(
+      PaymentGenerateLink.topic,
+      {
+        paymentLink,
+      }
+    );
+    const res = await rmqService.triggerRoute<
+      AccountBuyBooking.Request,
+      AccountBuyBooking.Response
+    >(AccountBuyBooking.topic, {
+      bookingId,
+      userId,
+    });
+    expect(res.paymentLink).toEqual(paymentLink);
+    await expect(
+      rmqService.triggerRoute<
+        AccountBuyBooking.Request,
+        AccountBuyBooking.Response
+      >(AccountBuyBooking.topic, {
+        bookingId,
+        userId,
+      })
+    ).rejects.toThrow();
   }, 15000);
 
   afterAll(async () => {
