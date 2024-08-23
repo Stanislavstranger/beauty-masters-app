@@ -27,7 +27,7 @@ export class BuyBookingSagaStateWaitingForPayment extends BuyBookingSagaState {
       this.saga.setState(PurchaseState.Canceled, this.saga.bookingId);
       return { user: this.saga.user, status: PaymentStatus.Canceled };
     }
-    if (status !== PaymentStatus.Success) {
+    if (status === PaymentStatus.Success) {
       return { user: this.saga.user, status: PaymentStatus.Success };
     }
     this.saga.setState(PurchaseState.Purchased, this.saga.bookingId);

@@ -8,11 +8,14 @@ import { INestApplication } from '@nestjs/common';
 import { UserRepository } from '../user/repositories/user.repository';
 import {
   AccountBuyBooking,
+  AccountCheckPayment,
   AccountLogin,
   AccountRegister,
   AccountUserInfo,
   BookingGetBooking,
+  PaymentCheck,
   PaymentGenerateLink,
+  PaymentStatus,
 } from '@./contracts';
 import { verify } from 'jsonwebtoken';
 
@@ -112,6 +115,21 @@ describe('UserController', () => {
         userId,
       })
     ).rejects.toThrow();
+  }, 15000);
+
+  it('BuyBooking', async () => {
+    const status = PaymentStatus.Success;
+    rmqService.mockReply<PaymentCheck.Response>(PaymentCheck.topic, {
+      status,
+    });
+    const res = await rmqService.triggerRoute<
+      AccountCheckPayment.Request,
+      AccountCheckPayment.Response
+    >(AccountCheckPayment.topic, {
+      bookingId,
+      userId,
+    });
+    expect(res.status).toEqual(status);
   }, 15000);
 
   afterAll(async () => {
